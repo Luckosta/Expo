@@ -12,24 +12,28 @@ import { View, Text } from 'react-native';
 const Stack = createStackNavigator();
 
 const Navigation: React.FC = (): JSX.Element => {
-  const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
+    const isAuthenticated = useSelector(
+        (state: RootState) => state.auth.isAuthenticated,
+    );
 
-  return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        {isAuthenticated ? (
-          <>
-            {/*<Stack.Screen name="Profile" component={ProfileScreen} />
+    return (
+        <NavigationContainer>
+            <Stack.Navigator>
+                {isAuthenticated ? (
+                    <>
+                        {/*<Stack.Screen name="Profile" component={ProfileScreen} />
             <Stack.Screen name="ArticleList" component={ArticleListScreen} />
             <Stack.Screen name="ArticleDetail" component={ArticleDetailScreen} />*/}
-          </>
-        ) : (
-			<View><Text>{'hello'}</Text></View>
-        //  <Stack.Screen name="Auth" component={AuthScreen} />
-        )}
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
+                    </>
+                ) : (
+                    <View>
+                        <Text>{'hello'}</Text>
+                    </View>
+                    //  <Stack.Screen name="Auth" component={AuthScreen} />
+                )}
+            </Stack.Navigator>
+        </NavigationContainer>
+    );
 };
 
 export default Navigation;
