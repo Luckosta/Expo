@@ -1,39 +1,63 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import Login from '../screens/login';
-import Register from '../screens/register';
+import LoginScreen from '../screens/login';
+import RegisterScreen from '../screens/register';
 
 import { useSelector } from 'react-redux';
 import ProfileScreen from '../screens/profile';
 import { RootState } from '../redux/store';
-//import AuthScreen from '../screens/AuthScreen';
-//import ProfileScreen from '../screens/ProfileScreen';
-//import ArticleListScreen from '../screens/ArticleListScreen';
-//import ArticleDetailScreen from '../screens/ArticleDetailScreen';
-//import { RootState } from '../redux/store/store';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useAuthenticated } from '../utils';
+import { exit } from '../redux/slices/auth';
+import CreatePostsScreen from '../screens/create_post';
+import { ValidScreens } from '../constants/screens';
+import PostsListScreen from '../screens/posts_list';
 
 const Stack = createStackNavigator();
 
 const Navigation: React.FC = (): JSX.Element => {
+    const [isAuthSaved, setIsAuthSaved] = useState<AuthType>('NO');
     const isAuthenticated = useSelector(
         (state: RootState) => state.auth.isAuthenticated,
     );
 
+    useEffect(() => {
+        AsyncStorage.getItem('auth').then((data) => {
+            if (data && data === 'YES') {
+                setIsAuthSaved(data);
+            }
+        });
+    }, [exit, useAuthenticated]);
+
     return (
         <NavigationContainer>
             <Stack.Navigator>
-                {isAuthenticated ? (
+                {isAuthSaved === 'YES' || isAuthenticated ? (
                     <>
                         <Stack.Screen
-                            name="Profile"
+                            name={ValidScreens.PROFILE_SCREEN}
                             component={ProfileScreen}
+                        />
+                        <Stack.Screen
+                            name={ValidScreens.CREATE_POSTS_SCREEN}
+                            component={CreatePostsScreen}
+                        />
+                        <Stack.Screen
+                            name={ValidScreens.POSTS_LIST_SCREEN}
+                            component={PostsListScreen}
                         />
                     </>
                 ) : (
                     <>
-                        <Stack.Screen name="Authentication" component={Login} />
-                        <Stack.Screen name="Register" component={Register} />
+                        <Stack.Screen
+                            name={ValidScreens.LOGIN_SCREEN}
+                            component={LoginScreen}
+                        />
+                        <Stack.Screen
+                            name={ValidScreens.REGISTER_SCREEN}
+                            component={RegisterScreen}
+                        />
                     </>
                 )}
             </Stack.Navigator>

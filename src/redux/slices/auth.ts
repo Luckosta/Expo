@@ -5,20 +5,6 @@ const authSlice = createSlice({
     name: 'auth',
     initialState,
     reducers: {
-        //loginUser(state, action) {
-        //    const { login, password } = action.payload;
-
-        //    const isValidCredentials = checkCredentials({ login, password });
-
-        //    if (isValidCredentials) {
-        //        state.user = action.payload;
-        //        state.error = null;
-        //    } else {
-        //        state.user = null;
-        //        state.error = 'Неверные учетные данные';
-        //    }
-        //},
-
         registerUser(state, action) {
             state.user = action.payload;
             state.error = null;
@@ -37,10 +23,15 @@ const authSlice = createSlice({
             state.user = null;
             state.error = action.payload;
         },
+        exit(state, action) {
+            state.isAuthenticated = false;
+            state.user = action.payload;
+            state.error = null;
+        },
     },
 });
 
-export const { registerUser, setError, loginSuccess, loginFailure } =
+export const { registerUser, setError, loginSuccess, loginFailure, exit } =
     authSlice.actions;
 
 export default authSlice.reducer;

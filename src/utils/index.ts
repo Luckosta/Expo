@@ -15,9 +15,15 @@ export const checkCredentials = ({
 };
 
 export const setUserData = async ({ username, login, password }: UserData) => {
-    await AsyncStorage.setItem('username', username);
-    await AsyncStorage.setItem('login', login);
-    await AsyncStorage.setItem('password', password);
+    if (username) {
+        await AsyncStorage.setItem('username', username);
+    }
+    if (login) {
+        await AsyncStorage.setItem('login', login);
+    }
+    if (password) {
+        await AsyncStorage.setItem('password', password);
+    }
 };
 
 export const getUserData = async (): Promise<UserData | null> => {
@@ -32,4 +38,8 @@ export const getUserData = async (): Promise<UserData | null> => {
         };
     }
     return null;
+};
+
+export const useAuthenticated = async (isAuth: AuthType) => {
+    await AsyncStorage.setItem('auth', isAuth);
 };

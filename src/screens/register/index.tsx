@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
     },
 });
 
-const Register: React.FC = (): JSX.Element => {
+const RegisterScreen: React.FC = (): JSX.Element => {
     const dispatch = useDispatch();
     const navigation = useNavigation();
     const [username, setUsername] = useState('');
@@ -64,4 +64,4 @@ const Register: React.FC = (): JSX.Element => {
     );
 };
 
-export default Register;
+export default RegisterScreen;

@@ -4,9 +4,10 @@ import { Button, colors, Input, Text } from 'react-native-elements';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { loginFailure, loginSuccess } from '../../redux/slices/auth';
-import { getUserData } from '../../utils';
+import { getUserData, useAuthenticated } from '../../utils';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
+import { ValidScreens } from '../../constants/screens';
 
 const styles = StyleSheet.create({
     container: {
@@ -28,7 +29,7 @@ const styles = StyleSheet.create({
     },
 });
 
-const Login: React.FC = (): JSX.Element => {
+const LoginScreen: React.FC = (): JSX.Element => {
     const dispatch = useDispatch();
     const authError = useSelector((state: RootState) => state.auth.error);
     const navigation = useNavigation();
@@ -47,6 +48,8 @@ const Login: React.FC = (): JSX.Element => {
                             username: data.username,
                         }),
                     );
+                    useAuthenticated('YES');
+                    navigation.navigate(ValidScreens.POSTS_LIST_SCREEN);
                 } else {
                     dispatch(loginFailure('Неверные данные'));
                 }
@@ -57,7 +60,7 @@ const Login: React.FC = (): JSX.Element => {
     return (
         <View style={styles.container}>
             <Input
-                placeholder="Имя пользователя"
+                placeholder="Логин пользователя"
                 value={login}
                 onChangeText={(text) => setLogin(text)}
             />
@@ -74,7 +77,9 @@ const Login: React.FC = (): JSX.Element => {
 
             <TouchableOpacity
                 style={styles.registration}
-                onPress={() => navigation.navigate('Register')}
+                onPress={() =>
+                    navigation.navigate(ValidScreens.REGISTER_SCREEN)
+                }
             >
                 <Text style={styles.link}>{'Зарегистрироваться'}</Text>
             </TouchableOpacity>
@@ -82,4 +87,4 @@ const Login: React.FC = (): JSX.Element => {
     );
 };
 
-export default Login;
+export default LoginScreen;
