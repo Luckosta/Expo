@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Button, colors, Input, Text } from 'react-native-elements';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { loginUser } from '../../redux/slices/auth';
-
-//import { loginUser } from '../actions/authActions';
+import { loginFailure, loginSuccess } from '../../redux/slices/auth';
+import { getUserData } from '../../utils';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../redux/store';
 
 const styles = StyleSheet.create({
     container: {
@@ -21,26 +22,44 @@ const styles = StyleSheet.create({
     link: {
         color: colors.primary,
     },
+
+    failValidation: {
+        color: colors.error,
+    },
 });
 
 const Login: React.FC = (): JSX.Element => {
     const dispatch = useDispatch();
-    //const authError = useSelector((state) => state.auth.error);
+    const authError = useSelector((state: RootState) => state.auth.error);
     const navigation = useNavigation();
 
-    const [username, setUsername] = useState('');
+    const [login, setLogin] = useState('');
     const [password, setPassword] = useState('');
 
     const handleLogin = () => {
-        dispatch(loginUser(username, password));
+        getUserData().then((data) => {
+            if (data) {
+                if (login === data.login && password === data.password) {
+                    dispatch(
+                        loginSuccess({
+                            login,
+                            password,
+                            username: data.username,
+                        }),
+                    );
+                } else {
+                    dispatch(loginFailure('Неверные данные'));
+                }
+            }
+        });
     };
 
     return (
         <View style={styles.container}>
             <Input
                 placeholder="Имя пользователя"
-                value={username}
-                onChangeText={(text) => setUsername(text)}
+                value={login}
+                onChangeText={(text) => setLogin(text)}
             />
             <Input
                 placeholder="Пароль"
@@ -49,7 +68,9 @@ const Login: React.FC = (): JSX.Element => {
                 onChangeText={(text) => setPassword(text)}
             />
             <Button title="Войти" onPress={handleLogin} />
-            {/*{authError && <Text style={{ color: 'red' }}>{authError}</Text>}*/}
+            {authError && (
+                <Text style={styles.failValidation}>{authError}</Text>
+            )}
 
             <TouchableOpacity
                 style={styles.registration}

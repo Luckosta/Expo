@@ -4,12 +4,13 @@ type AuthState = {
     error: string | null;
 };
 
-type RootState = {
-    auth: AuthState;
-};
-
 type UserData = {
     username: string;
+    login: string;
+    password: string;
+};
+
+type LoginPayload = {
     login: string;
     password: string;
 };

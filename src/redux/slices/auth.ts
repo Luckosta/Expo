@@ -1,20 +1,24 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import registerUserAsync from '../actions/register';
-
-const initialState: AuthState = {
-    isAuthenticated: false,
-    user: null,
-    error: null,
-};
+import initialState from '../initial_state';
 
 const authSlice = createSlice({
     name: 'auth',
     initialState,
     reducers: {
-        loginUser(state, action) {
-            state.user = action.payload;
-            state.error = null;
-        },
+        //loginUser(state, action) {
+        //    const { login, password } = action.payload;
+
+        //    const isValidCredentials = checkCredentials({ login, password });
+
+        //    if (isValidCredentials) {
+        //        state.user = action.payload;
+        //        state.error = null;
+        //    } else {
+        //        state.user = null;
+        //        state.error = 'Неверные учетные данные';
+        //    }
+        //},
+
         registerUser(state, action) {
             state.user = action.payload;
             state.error = null;
@@ -34,20 +38,9 @@ const authSlice = createSlice({
             state.error = action.payload;
         },
     },
-    extraReducers: (builder) => {
-        builder
-            .addCase(registerUserAsync.fulfilled, (state, action) => {
-                state.user = action.payload;
-                state.error = null;
-            })
-            .addCase(registerUserAsync.rejected, (state, action) => {
-                state.user = null;
-                state.error = action.error.message || null;
-            });
-    },
 });
 
-export const { loginUser, registerUser, setError, loginSuccess, loginFailure } =
+export const { registerUser, setError, loginSuccess, loginFailure } =
     authSlice.actions;
 
 export default authSlice.reducer;

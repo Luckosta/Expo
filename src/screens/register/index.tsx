@@ -1,13 +1,11 @@
 // Register.js
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useDispatch } from 'react-redux';
-import { Button, colors, Input, Text } from 'react-native-elements';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Button, colors, Input } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
-
-import { registerUser } from '../actions/authActions';
-import registerUserAsync from '../../redux/actions/register';
+import { registerUser } from '../../redux/slices/auth';
+import { setUserData } from '../../utils';
 
 const styles = StyleSheet.create({
     container: {
@@ -28,10 +26,8 @@ const Register: React.FC = (): JSX.Element => {
     const handleRegister = async () => {
         if (password === confirmPassword) {
             try {
-                await AsyncStorage.setItem('username', username);
-                await AsyncStorage.setItem('login', login);
-                await AsyncStorage.setItem('password', password);
-                dispatch(registerUserAsync(username, login, password));
+                setUserData({ username, login, password });
+                dispatch(registerUser({ username, login, password }));
                 navigation.goBack();
             } catch (error) {
                 console.error('Ошибка сохранения данных пользователя:');

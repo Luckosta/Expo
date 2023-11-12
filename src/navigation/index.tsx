@@ -4,7 +4,9 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Login from '../screens/login';
 import Register from '../screens/register';
 
-//import { useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
+import ProfileScreen from '../screens/profile';
+import { RootState } from '../redux/store';
 //import AuthScreen from '../screens/AuthScreen';
 //import ProfileScreen from '../screens/ProfileScreen';
 //import ArticleListScreen from '../screens/ArticleListScreen';
@@ -14,20 +16,19 @@ import Register from '../screens/register';
 const Stack = createStackNavigator();
 
 const Navigation: React.FC = (): JSX.Element => {
-    //const isAuthenticated = useSelector(
-    //    (state: RootState) => state.auth.isAuthenticated,
-    //);
-
-    const flag = false;
+    const isAuthenticated = useSelector(
+        (state: RootState) => state.auth.isAuthenticated,
+    );
 
     return (
         <NavigationContainer>
             <Stack.Navigator>
-                {flag ? (
+                {isAuthenticated ? (
                     <>
-                        {/*<Stack.Screen name="Profile" component={ProfileScreen} />
-            <Stack.Screen name="ArticleList" component={ArticleListScreen} />
-            <Stack.Screen name="ArticleDetail" component={ArticleDetailScreen} />*/}
+                        <Stack.Screen
+                            name="Profile"
+                            component={ProfileScreen}
+                        />
                     </>
                 ) : (
                     <>
