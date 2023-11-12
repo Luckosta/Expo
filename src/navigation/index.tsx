@@ -13,6 +13,8 @@ import { exit } from '../redux/slices/auth';
 import CreatePostsScreen from '../screens/create_post';
 import { ValidScreens } from '../constants/screens';
 import PostsListScreen from '../screens/posts_list';
+import PostView from '../screens/post_view';
+import PostEditScreen from '../screens/post_edit';
 
 const Stack = createStackNavigator();
 
@@ -28,16 +30,28 @@ const Navigation: React.FC = (): JSX.Element => {
                 setIsAuthSaved(data);
             }
         });
-    }, [exit, useAuthenticated]);
+    }, [exit, useAuthenticated, isAuthenticated]);
 
     return (
         <NavigationContainer>
-            <Stack.Navigator>
+            <Stack.Navigator
+                screenOptions={{
+                    headerBackTitle: 'Назад',
+                }}
+            >
                 {isAuthSaved === 'YES' || isAuthenticated ? (
                     <>
                         <Stack.Screen
                             name={ValidScreens.PROFILE_SCREEN}
                             component={ProfileScreen}
+                        />
+                        <Stack.Screen
+                            name={ValidScreens.POST_EDIT}
+                            component={PostEditScreen}
+                        />
+                        <Stack.Screen
+                            name={ValidScreens.POST_VIEW}
+                            component={PostView}
                         />
                         <Stack.Screen
                             name={ValidScreens.CREATE_POSTS_SCREEN}

@@ -10,6 +10,9 @@ import {
 import { useDispatch } from 'react-redux';
 import { addPost } from '../../redux/slices/posts';
 import { useNavigation } from '@react-navigation/native';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../redux/store';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const styles = StyleSheet.create({
     container: {
@@ -25,7 +28,7 @@ const styles = StyleSheet.create({
         borderColor: colors.grey5,
         borderWidth: 1,
     },
-    addButton: {
+    button: {
         marginTop: 12,
     },
     imageContainer: {
@@ -38,6 +41,7 @@ const styles = StyleSheet.create({
 
 const CreatePostScreen = () => {
     const dispatch = useDispatch();
+    const currentUser = useSelector((state: RootState) => state.auth.user);
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [images, setImages] = useState<string[]>([]);
@@ -81,7 +85,7 @@ const CreatePostScreen = () => {
         }
     };
 
-    const handleCreatePost = () => {
+    const handleCreatePost = async () => {
         if (!title || !content) {
             Alert.alert('Ошибка', 'Заголовок и контент не могут быть пустыми');
             return;
@@ -89,10 +93,22 @@ const CreatePostScreen = () => {
 
         const newPost = {
             id: Date.now().toString(),
+            author: currentUser?.username || 'anonymous',
             title,
             content,
             images,
         };
+
+        const postsString = await AsyncStorage.getItem('posts');
+
+        let posts = [];
+        if (postsString) {
+            posts = JSON.parse(postsString);
+        }
+
+        posts.push(newPost);
+
+        await AsyncStorage.setItem('posts', JSON.stringify(posts));
 
         dispatch(addPost(newPost));
 
@@ -115,7 +131,12 @@ const CreatePostScreen = () => {
                     onChangeText={(text) => setContent(text)}
                     multiline
                 />
-                <Button title="Добавить изображение" onPress={handleAddImage} />
+                <View style={styles.button}>
+                    <Button
+                        title="Добавить изображение"
+                        onPress={handleAddImage}
+                    />
+                </View>
                 {images.map((image, index) => (
                     <View key={index} style={styles.imageContainer}>
                         <Text style={styles.imageText}>
@@ -124,7 +145,9 @@ const CreatePostScreen = () => {
                         <Text>{image}</Text>
                     </View>
                 ))}
-                <Button title="Создать статью" onPress={handleCreatePost} />
+                <View style={styles.button}>
+                    <Button title="Создать статью" onPress={handleCreatePost} />
+                </View>
             </View>
         </ScrollView>
     );

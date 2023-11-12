@@ -4,4 +4,6 @@ export const ValidScreens = {
     CREATE_POSTS_SCREEN: 'CreatePostsScreen',
     PROFILE_SCREEN: 'ProfileScreen',
     POSTS_LIST_SCREEN: 'PostsListScreen',
+    POST_VIEW: 'PostView',
+    POST_EDIT: 'PostEdit',
 };
