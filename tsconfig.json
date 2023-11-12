@@ -10,7 +10,7 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": true,
+    "noEmit": true
   },
   "include": [
     "src/**/*.ts",
@@ -23,4 +23,5 @@
     "metro.config.js",
     "jest.config.js"
   ],
+  "extends": "expo/tsconfig.base"
 }

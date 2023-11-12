@@ -1,8 +1,10 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { useSelector } from 'react-redux';
-import { View, Text } from 'react-native';
+import Login from '../screens/login';
+import Register from '../screens/register';
+
+//import { useSelector } from 'react-redux';
 //import AuthScreen from '../screens/AuthScreen';
 //import ProfileScreen from '../screens/ProfileScreen';
 //import ArticleListScreen from '../screens/ArticleListScreen';
@@ -12,24 +14,26 @@ import { View, Text } from 'react-native';
 const Stack = createStackNavigator();
 
 const Navigation: React.FC = (): JSX.Element => {
-    const isAuthenticated = useSelector(
-        (state: RootState) => state.auth.isAuthenticated,
-    );
+    //const isAuthenticated = useSelector(
+    //    (state: RootState) => state.auth.isAuthenticated,
+    //);
+
+    const flag = false;
 
     return (
         <NavigationContainer>
             <Stack.Navigator>
-                {isAuthenticated ? (
+                {flag ? (
                     <>
                         {/*<Stack.Screen name="Profile" component={ProfileScreen} />
             <Stack.Screen name="ArticleList" component={ArticleListScreen} />
             <Stack.Screen name="ArticleDetail" component={ArticleDetailScreen} />*/}
                     </>
                 ) : (
-                    <View>
-                        <Text>{'hello'}</Text>
-                    </View>
-                    //  <Stack.Screen name="Auth" component={AuthScreen} />
+                    <>
+                        <Stack.Screen name="Authentication" component={Login} />
+                        <Stack.Screen name="Register" component={Register} />
+                    </>
                 )}
             </Stack.Navigator>
         </NavigationContainer>

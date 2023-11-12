@@ -1,9 +1,15 @@
 type AuthState = {
     isAuthenticated: boolean;
-    user: string | null;
+    user: UserData | null;
     error: string | null;
 };
 
 type RootState = {
     auth: AuthState;
+};
+
+type UserData = {
+    username: string;
+    login: string;
+    password: string;
 };
