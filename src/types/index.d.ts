@@ -9,7 +9,7 @@ type UserPost = {
     author: string;
     title: string;
     content: string;
-    images: string[];
+    image?: string;
 };
 
 type UserData = {

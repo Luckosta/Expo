@@ -1,5 +1,3 @@
-// PostEdit.tsx
-
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -7,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { updatePost } from '../../redux/slices/posts';
 import { RootState } from '../../redux/store';
 import { colors } from 'react-native-elements';
+import { useNavigation } from '@react-navigation/native';
 
 const styles = StyleSheet.create({
     container: {
@@ -37,10 +36,6 @@ const PostEditScreen: React.FC<Props> = ({ route }) => {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
 
-    useEffect(() => {
-        loadPost();
-    }, [postId]);
-
     const loadPost = async () => {
         try {
             const postsString = await AsyncStorage.getItem('posts');
@@ -69,7 +64,7 @@ const PostEditScreen: React.FC<Props> = ({ route }) => {
                             ...post,
                             title,
                             content,
-                            author: currentUser?.username,
+                            author: currentUser?.login,
                         };
                     }
                     return post;
@@ -87,11 +82,16 @@ const PostEditScreen: React.FC<Props> = ({ route }) => {
                 if (foundedPost) {
                     dispatch(updatePost(foundedPost));
                 }
+                navigation.goBack();
             }
         } catch (error) {
             console.error('Ошибка при сохранении статьи:', error);
         }
     };
+
+    useEffect(() => {
+        loadPost();
+    }, [postId]);
 
     return (
         <View style={styles.container}>

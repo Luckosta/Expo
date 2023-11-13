@@ -48,26 +48,29 @@ const PostView: React.FC<Props> = ({ route }): JSX.Element => {
     const [isEditable, setIsEditable] = useState(false);
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
-    const [image, setImage] = useState('');
+    const [image, setImage] = useState<string | null>(null);
+    const [author, setAuthor] = useState('');
 
     const navigation = useNavigation();
-
-    useEffect(() => {
-        loadPost();
-    }, [postId]);
 
     const loadPost = async () => {
         try {
             const postsString = await AsyncStorage.getItem('posts');
             if (postsString) {
                 const posts = JSON.parse(postsString);
-                const post = posts.find((item: UserPost) => item.id === postId);
+                const post: UserPost = posts.find(
+                    (item: UserPost) => item.id === postId,
+                );
+                const postFromStore = currentUser?.posts?.find(
+                    (item: UserPost) => item.id === postId,
+                );
 
                 if (post) {
-                    setTitle(post.title);
-                    setContent(post.content);
-                    setImage(post.image);
-                    setIsEditable(currentUser?.username === post.author);
+                    setTitle(postFromStore?.title || post.title);
+                    setContent(postFromStore?.content || post.content);
+                    setImage(postFromStore?.image || post.image || null);
+                    setAuthor(post.author);
+                    setIsEditable(currentUser?.login === post.author);
                 }
             }
         } catch (error) {
@@ -79,8 +82,13 @@ const PostView: React.FC<Props> = ({ route }): JSX.Element => {
         navigation.navigate(ValidScreens.POST_EDIT, { postId });
     };
 
+    useEffect(() => {
+        loadPost();
+    }, [postId]);
+
     return (
         <View style={styles.container}>
+            <Text style={styles.title}>{'Автор: ' + author}</Text>
             <Text style={styles.title}>{title}</Text>
             <Text style={styles.content}>{content}</Text>
             {image !== '' && (

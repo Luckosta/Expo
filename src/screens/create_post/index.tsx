@@ -93,7 +93,7 @@ const CreatePostScreen = () => {
 
         const newPost = {
             id: Date.now().toString(),
-            author: currentUser?.username || 'anonymous',
+            author: currentUser?.login || 'anonymous',
             title,
             content,
             images,
