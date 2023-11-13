@@ -49,6 +49,7 @@ const ProfileScreen: React.FC = (): JSX.Element => {
     const currentUser = useSelector((state: RootState) => state.auth.user);
     const [newName, setNewName] = useState('');
     const [isModalVisible, setModalVisible] = useState(false);
+    const [login, setLogin] = useState(currentUser?.login);
     const navigation = useNavigation();
 
     const handleUpdateName = () => {
@@ -103,6 +104,9 @@ const ProfileScreen: React.FC = (): JSX.Element => {
         getUserData().then((data) => {
             if (data && data.username) {
                 setNewName(data.username);
+                if (data.login) {
+                    setLogin(data.login);
+                }
             }
         });
     }, []);
@@ -110,15 +114,8 @@ const ProfileScreen: React.FC = (): JSX.Element => {
     return (
         <View style={styles.container}>
             <Text>
-                {`Профиль пользователя: ${currentUser?.login || 'Неизвестно'}`}
+                {`Профиль пользователя: ${currentUser?.login || login}`}
             </Text>
-            {Platform.OS === 'ios' && (
-                <Input
-                    placeholder="Введите новое имя"
-                    value={newName}
-                    onChangeText={(text) => setNewName(text)}
-                />
-            )}
             <View style={styles.button}>
                 <Button title="Обновить имя" onPress={handleUpdateName} />
             </View>
