@@ -23,7 +23,8 @@
 2. Клонируйте репозиторий: `git clone https://github.com/your-username/your-project.git`
 3. Перейдите в каталог проекта: `cd your-project`
 4. Установите зависимости: `npm install`
-5. Запустите проект: `npm start`
+5. Запустите проект под ios: `expo start --ios`
+6. Запустите проект под android: `expo start --android`
 
 ## Технологии
 
